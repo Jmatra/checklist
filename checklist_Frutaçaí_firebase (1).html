@@ -132,22 +132,7 @@ html,body{min-height:100vh;background:var(--bg);font-family:'DM Sans',sans-serif
 #save-indicator.show{opacity:1}
 #save-indicator svg{width:12px;height:12px}
 
-/* ── Admin quick-actions bar ── */
-.admin-quick-bar{
-  display:none;
-  position:fixed;bottom:calc(85px + env(safe-area-inset-bottom,0px));
-  left:50%;transform:translateX(-50%);
-  z-index:800;
-  background:var(--tx);color:#fff;
-  padding:8px 14px;border-radius:99px;
-  font-size:12px;font-weight:600;font-family:'DM Sans',sans-serif;
-  gap:12px;align-items:center;
-  box-shadow:0 4px 20px rgba(0,0,0,.2);
-  white-space:nowrap;
-}
-.admin-quick-bar.show{display:flex}
-.aqb-btn{height:30px;padding:0 10px;border-radius:99px;border:none;background:rgba(255,255,255,.18);color:#fff;font-size:11px;font-weight:600;font-family:'DM Sans',sans-serif;cursor:pointer;white-space:nowrap;transition:background .15s}
-.aqb-btn:active{background:rgba(255,255,255,.32)}
+
 /* ── End save indicator ── */
 /* ── Loading Screen ── */
 #app-loading{
@@ -955,7 +940,6 @@ html,body{min-height:100vh;background:var(--bg);font-family:'DM Sans',sans-serif
   <div class="tabs" id="tabs-row">
       <button class="tab" onclick="setMode('checklist')">✅ Checklist</button>
       <button class="tab" onclick="setMode('history')">📅 Histórico</button>
-      <button class="tab" onclick="setMode('itens')">➕ Itens</button>
       <button class="tab admin-tab on" onclick="setMode('config')">⚙️ Config</button>
       <button class="tab admin-tab" onclick="setMode('stores')">🏪 Lojas</button></div>
   <div class="sidebar-footer" id="sidebar-footer" style="display:none">
@@ -1958,14 +1942,12 @@ function renderTabs(){
     tabs.innerHTML=`
       <button class="tab${mode==='checklist'?' on':''}" onclick="setMode('checklist')">✅ Checklist</button>
       <button class="tab${mode==='history'?' on':''}" onclick="setMode('history')">📅 Histórico</button>
-      <button class="tab${mode==='itens'?' on':''}" onclick="setMode('itens')">➕ Itens</button>
       <button class="tab admin-tab${mode==='config'?' on':''}" onclick="setMode('config')">⚙️ Config</button>
       <button class="tab admin-tab${mode==='stores'?' on':''}" onclick="setMode('stores')">🏪 Lojas</button>`;
   } else {
     tabs.innerHTML=`
       <button class="tab${mode==='checklist'?' on':''}" onclick="setMode('checklist')">✅ Checklist</button>
       <button class="tab${mode==='history'?' on':''}" onclick="setMode('history')">📅 Histórico</button>
-      <button class="tab${mode==='itens'?' on':''}" onclick="setMode('itens')">➕ Itens</button>`;
   }
 }
 
@@ -2444,18 +2426,7 @@ function renderChecklist(){
   h+=`<button class="pill${filter==='all'?' on':''}" onclick="setFilter('all',this)">Todos</button>`;
   store.categories.forEach(c=>{h+=`<button class="pill${String(filter)===String(c.id)?' on':''}" onclick="setFilter(${c.id},this)">${c.name}</button>`;});
   h+=`<button class="pill${filter==='missing'?' on':''}" onclick="setFilter('missing',this)">Em falta</button></div>`;
-  if(userModule==='funcionario'){
-    h+=`<div class="func-add-section">
-      <div class="func-add-title">+ Adicionar item</div>
-      <div class="func-add-row">
-        <select class="func-add-select" id="func-cat-sel">
-          ${store.categories.map(c=>`<option value="${c.id}">${c.name}</option>`).join('')}
-        </select>
-        <input class="func-add-input" id="func-item-inp" type="text" placeholder="Nome do item..." onkeydown="if(event.key==='Enter')funcAddItem()">
-        <button class="btn-plus" onclick="funcAddItem()">+</button>
-      </div>
-    </div>`;
-  }
+
   const listHTML = buildListHTML(store);
   // No desktop, envolve em grid 2 colunas
   h += `<div class="checklist-grid">${listHTML}</div>`;
@@ -4025,10 +3996,5 @@ tickClock();setInterval(tickClock,1000);
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
   Salvo automaticamente
 </div>
-<div id="admin-quick-bar" class="admin-quick-bar">
-  <span style="font-size:13px">⚙️ Admin</span>
-  <button class="aqb-btn" onclick="setMode('config')">Config</button>
-  <button class="aqb-btn" onclick="setMode('stores')">Lojas</button>
-  <button class="aqb-btn" onclick="setMode('itens')">+ Itens</button>
-</div>
+
 </div></body></html>
