@@ -1,0 +1,29 @@
+name: Lembretes Automaticos Checklist Frutacai
+
+on:
+  schedule:
+    - cron: '0 11 * * *'
+    - cron: '0 21 * * *'
+  workflow_dispatch:
+
+jobs:
+  enviar-lembrete:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout do repositorio
+        uses: actions/checkout@v4
+
+      - name: Instalar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Instalar dependencias
+        run: npm install firebase-admin
+
+      - name: Enviar lembrete
+        env:
+          FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
+          GITHUB_EVENT_SCHEDULE: ${{ github.event.schedule }}
+        run: node enviar_lembrete.js
